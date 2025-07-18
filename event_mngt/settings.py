@@ -58,17 +58,21 @@ ROOT_URLCONF = 'event_mngt.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+                # Your current list may be missing items. Replace with this:
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',  # ✅ REQUIRED
+                'django.contrib.auth.context_processors.auth',  # ✅ REQUIRED
+                'django.contrib.messages.context_processors.messages',  # ✅ REQUIRED
             ],
         },
     },
 ]
+
+
 
 WSGI_APPLICATION = 'event_mngt.wsgi.application'
 
@@ -108,7 +112,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Africa/Nairobi'
 
 USE_I18N = True
 
@@ -124,3 +128,6 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'

@@ -1,0 +1,28 @@
+<h2>Book a Venue</h2>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <label>Name:</label><br>
+    {{ form.name }}<br><br>
+
+    <label>Event Type:</label><br>
+    {{ form.event_type }}<br><br>
+
+    <label>Expected Attendance:</label><br>
+    {{ form.expected_attendance }}<br><br>
+
+    <label>Poster Image:</label><br>
+    {{ form.poster }}<br><br>
+
+    <label>Description:</label><br>
+    {{ form.description }}<br><br>
+
+    <label>Event Date:</label><br>
+    {{ form.event_date }}<br><br>
+
+    <label>Venue:</label><br>
+    {{ form.venue }}<br><br>
+
+    <button type="submit">Submit Booking</button>
+</form>
