@@ -28,3 +28,6 @@ from django.shortcuts import render
 
 def home (request):
     return render(request, 'bookings/home.html')
+
+def booking_home(request):
+    return render(request, 'bookings/home.html')

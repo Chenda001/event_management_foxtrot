@@ -1,12 +1,101 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2>Register</h2>
 
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Register</button>
-</form>
+<style>
+  .register-container {
+    max-width: 400px;
+    margin: 50px auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  }
 
-<p>Already have an account? <a href="{% url 'login' %}">Login here</a></p>
+  .register-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .register-container form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .register-container input {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  .register-container button {
+    padding: 10px;
+    background: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .register-container button:hover {
+    background: #218838;
+  }
+
+  .password-help {
+    color: red;
+    font-size: 0.9em;
+    display: none;
+    margin-bottom: 10px;
+  }
+</style>
+
+<div class="register-container">
+  <h2>Register</h2>
+
+  <form method="post" id="registerForm">
+    {% csrf_token %}
+    {{ form.username.label_tag }} {{ form.username }} <br>
+
+    {{ form.email.label_tag }} {{ form.email }} <br>
+
+    {{ form.password1.label_tag }} {{ form.password1 }}
+
+    <ul class="password-help" id="passwordHelp">
+      <li>Your password can’t be too similar to your other personal information.</li>
+      <li>Your password must contain at least 8 characters.</li>
+      <li>Your password can’t be a commonly used password.</li>
+      <li>Your password can’t be entirely numeric.</li>
+    </ul>
+
+    {{ form.password2.label_tag }} {{ form.password2 }} <br>
+
+    <button type="submit">Register</button>
+  </form>
+
+  <p style="text-align:center;">Already have an account? <a href="{% url 'login' %}">Login here</a></p>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const passwordInput = document.getElementById("id_password1");
+  const passwordHelp = document.getElementById("passwordHelp");
+
+  passwordInput.addEventListener("input", function () {
+    const val = passwordInput.value;
+
+    if (
+      val.length < 8 ||
+      /^\d+$/.test(val) ||                      // all numbers
+      /password|123456|qwerty/.test(val.toLowerCase()) // common words
+    ) {
+      passwordHelp.style.display = "block";
+    } else {
+      passwordHelp.style.display = "none";
+    }
+  });
+});
+</script>
+
 {% endblock %}
+<footer>
+  <p>&copy; 2025 Event Management</p>
