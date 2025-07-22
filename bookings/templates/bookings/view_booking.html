@@ -25,10 +25,11 @@
                 <td>{{ booking.start_datetime|date:"Y-m-d H:i" }}</td>
                 <td>{{ booking.end_datetime|date:"Y-m-d H:i" }}</td>
                 <td>
+                    #booking status
                     {% if booking.approved %}
-                        ✅
+                        Approved
                     {% else %}
-                        ❌
+                        Rejected
                     {% endif %}
                 </td>
                 <td>{{ booking.created_at|date:"Y-m-d H:i" }}</td>
