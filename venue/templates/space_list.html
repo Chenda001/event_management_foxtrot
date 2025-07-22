@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Spaces</title>
+    <!-- Link to external styles.css -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    {% comment %} <link rel="stylesheet" href="/static/css/styles.css"> {% endcomment %}
+</head>
+<body>
+    <style>
+        /* static/css/styles.css */
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* Light gray background */
+            color: #374151; /* Dark gray text */
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .main-heading {
+            font-size: 2.25rem; /* text-4xl */
+            font-weight: 700; /* font-bold */
+            text-align: center; /* text-center */
+            color: #111827; /* text-gray-900 */
+            margin-bottom: 2.5rem; /* mb-10 */
+            margin-top: 1.5rem; /* mt-6 */
+        }
+
+        .space-grid-container {
+            display: grid;
+            grid-template-columns: repeat(1, minmax(0, 1fr)); /* grid-cols-1 */
+            gap: 2rem; /* gap-8 */
+        }
+
+        @media (min-width: 640px) { /* sm breakpoint */
+            .space-grid-container {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (min-width: 1024px) { /* lg breakpoint */
+            .space-grid-container {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+
+        .space-card {
+            background-color: #ffffff;
+            border-radius: 1rem; /* More rounded corners */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Softer shadow */
+            overflow: hidden;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            height: 100%; /* Ensure cards fill grid height */
+        }
+
+        .space-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        .space-images {
+            display: flex;
+            gap: 0.5rem; /* Space between images */
+            padding: 0.75rem;
+            background-color: #e5e7eb; /* Slightly darker background for image container */
+            border-bottom: 1px solid #d1d5db;
+        }
+
+        .space-images img {
+            width: calc(33.33% - 0.33rem); /* Three images per row with gap */
+            height: 120px; /* Fixed height for consistency */
+            object-fit: cover;
+            border-radius: 0.5rem; /* Rounded corners for images */
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .space-images img:hover {
+            transform: scale(1.03);
+        }
+
+        .space-content {
+            padding: 1.5rem;
+            flex-grow: 1; /* Allow content to grow and push button to bottom */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .space-title {
+            font-size: 1.5rem; /* text-2xl */
+            font-weight: 600; /* font-semibold */
+            color: #111827; /* text-gray-900 */
+            margin-bottom: 0.5rem; /* mb-2 */
+        }
+
+        .space-info-text {
+            color: #4b5563; /* text-gray-600 */
+            margin-bottom: 0.25rem; /* mb-1 */
+        }
+
+        .space-info-text.mb-4 { /* Specific rule for location paragraph */
+            margin-bottom: 1rem;
+        }
+
+        .space-status-display {
+            font-size: 1.125rem; /* text-lg */
+            font-weight: 500; /* font-medium */
+            margin-bottom: 1.5rem; /* mb-6 */
+        }
+
+        .status-free {
+            color: #10b981; /* Green for free */
+            font-weight: 600;
+        }
+
+        .status-booked {
+            color: #ef4444; /* Red for booked */
+            font-weight: 600;
+        }
+
+        .space-form {
+            margin-top: auto; /* mt-auto */
+        }
+
+        .book-button {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem; /* More rounded button */
+            font-weight: 600;
+            text-align: center;
+            transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            width: 100%; /* w-full */
+        }
+
+        .book-button-free {
+            background-color: #3b82f6; /* Blue for booking */
+            color: white;
+        }
+
+        .book-button-free:hover {
+            background-color: #2563eb;
+            transform: translateY(-2px);
+        }
+
+        .book-button-booked {
+            background-color: #f97316; /* Orange for unbooking */
+            color: white;
+        }
+
+        .book-button-booked:hover {
+            background-color: #ea580c;
+            transform: translateY(-2px);
+        }
+
+        .no-spaces-message {
+            text-align: center; /* text-center */
+            color: #4b5563; /* text-gray-600 */
+            font-size: 1.25rem; /* text-xl */
+            margin-top: 3rem; /* mt-12 */
+        }
+
+    </style>    
+    <div class="container">
+        <h1 class="main-heading">Available Spaces for Booking</h1>
+
+        {% if spaces %}
+            <div class="space-grid-container">
+                {% for space in spaces %}
+                    <div class="space-card">
+                        <div class="space-images">
+                            <!-- Display images with fallbacks -->
+                            <img src="{{ space.image1.url }}" alt="{{ space.name }} Image 1"
+                                 onerror="this.onerror=null;this.src='https://placehold.co/400x300/e5e7eb/6b7280?text=No+Image';"
+                                 class="space-image">
+                            <img src="{{ space.image2.url }}" alt="{{ space.name }} Image 2"
+                                 onerror="this.onerror=null;this.src='https://placehold.co/400x300/e5e7eb/6b7280?text=No+Image';"
+                                 class="space-image">
+                            <img src="{{ space.image3.url }}" alt="{{ space.name }} Image 3"
+                                 onerror="this.onerror=null;this.src='https://placehold.co/400x300/e5e7eb/6b7280?text=No+Image';"
+                                 class="space-image">
+                        </div>
+                        <div class="space-content">
+                            <h2 class="space-title">{{ space.name }}</h2>
+                            <p class="space-info-text mb-1"><strong>Capacity:</strong> {{ space.capacity }} people</p>
+                            <p class="space-info-text mb-4"><strong>Location:</strong> {{ space.location }}</p>
+                            
+                            <p class="space-status-display">
+                                <strong>Status:</strong>
+                                <span class="{% if space.is_booked %}status-booked{% else %}status-free{% endif %}">
+                                    {{ space.get_status_display }}
+                                </span>
+                            </p>
+
+                            {% comment %} <form action="{% url 'book_space' space.id %}" method="post" class="space-form">
+                                {% csrf_token %}
+                                <button type="submit"
+                                        class="book-button {% if space.is_booked %}book-button-booked{% else %}book-button-free{% endif %}">
+                                    {% if space.is_booked %}
+                                        Unbook Space
+                                    {% else %}
+                                        Book Space
+                                    {% endif %}
+                                </button>
+                            </form> {% endcomment %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="no-spaces-message">No spaces available yet. Please add some from the admin panel!</p>
+        {% endif %}
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const images = document.querySelectorAll('.space-image');
+            images.forEach(img => {
+                if (img.complete && img.naturalHeight !== 0) {
+                    img.style.opacity = 1;
+                } else {
+                    img.style.opacity = 0;
+                    img.style.transition = 'opacity 0.5s ease-in';
+                    img.onload = () => {
+                        img.style.opacity = 1;
+                    };
+                    img.onerror = () => {
+                        img.style.opacity = 1;
+                    };
+                }
+            });
+        });
+    </script>
+</body>
+</html>
