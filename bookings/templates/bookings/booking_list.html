@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Booked Spaces</h2>
+
+{% if bookings %}
+    <ul>
+        {% for booking in bookings %}
+            <li>
+                <strong>Venue:</strong> {{ booking.venue.name }}<br>
+                <strong>Booked By:</strong> {{ booking.user.username }}<br>
+                <strong>Date:</strong> {{ booking.date }}<br>
+                <strong>Status:</strong> {{ booking.status }}
+            </li>
+            <hr>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No bookings found.</p>
+{% endif %}
+
+{% endblock %}
