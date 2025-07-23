@@ -1,10 +1,10 @@
 from django.shortcuts import render
 from bookings.models import Booking
-from venue.models import Space  # Needed for venue filter
+from venue.models import Space
 from django.utils import timezone
 
 def event_list(request):
-    now = timezone.now()
+    now = timezone.now().date()  # only the date part
     bookings = Booking.objects.filter(approved=True)
 
     # GET filters
@@ -14,16 +14,16 @@ def event_list(request):
 
     # Apply filters
     if space_id:
-        bookings = bookings.filter(space__id=space_id)
+        bookings = bookings.filter(venue__id=space_id)
     if start:
-        bookings = bookings.filter(start_datetime__date__gte=start)
+        bookings = bookings.filter(event_date__gte=start)
     if end:
-        bookings = bookings.filter(end_datetime__date__lte=end)
+        bookings = bookings.filter(event_date__lte=end)
 
     # Categorize
-    ongoing = bookings.filter(start_datetime__lte=now, end_datetime__gte=now)
-    upcoming = bookings.filter(start_datetime__gt=now)
-    past = bookings.filter(end_datetime__lt=now)
+    ongoing = bookings.filter(event_date=now)
+    upcoming = bookings.filter(event_date__gt=now)
+    past = bookings.filter(event_date__lt=now)
 
     context = {
         'ongoing_events': ongoing,
