@@ -48,29 +48,37 @@
     margin-bottom: 10px;
   }
 </style>
-
 <div class="register-container">
   <h2>Register</h2>
 
   <form method="post" id="registerForm"> 
     {% csrf_token %}
     {{ form.username.label_tag }} {{ form.username }} <br>
-
     {{ form.email.label_tag }} {{ form.email }} <br>
-
-    {{ form.password1.label_tag }} {{ form.password1 }}
-
-    <ul class="password-help" id="passwordHelp">
-      <li>Your password can’t be too similar to your other personal information.</li>
-      <li>Your password must contain at least 8 characters.</li>
-      <li>Your password can’t be a commonly used password.</li>
-      <li>Your password can’t be entirely numeric.</li>
-    </ul>
-
+    {{ form.password1.label_tag }} {{ form.password1 }} <br>
     {{ form.password2.label_tag }} {{ form.password2 }} <br>
 
     <button type="submit">Register</button>
   </form>
+
+  {% if form.errors %}
+  <div style="color: red; margin-top: 1em;">
+    <ul>
+      {% for field in form %}
+        {% for error in field.errors %}
+          <li>{{ field.label }}: {{ error }}</li>
+        {% endfor %}
+      {% endfor %}
+      {% for error in form.non_field_errors %}
+        <li>{{ error }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+
+  <p style="text-align:center;">Already have an account? <a href="{% url 'login' %}">Login here</a></p>
+</div>
+
 
   <p style="text-align:center;">Already have an account? <a href="{% url 'login' %}">Login here</a></p>
 </div>
