@@ -23,10 +23,9 @@ urlpatterns = [
     # path('', home), 
     path('admin/', admin.site.urls),
     path('', include('accounts.urls')),
-    path('venue/', include(('venue.urls', 'venue'), namespace='venue')), 
-    path('bookings/', include(('bookings.urls','bookings'), namespace='bookings')),
-    path('events/', include(('event.urls','event'), namespace='event')),
-
+    path('venue/', include(('venue.urls','venue'), namespace='venue')), 
+    path('bookings/', include(('bookings.urls'), namespace='bookings')),
+    path('event/', include(('event.urls', 'event'), namespace='event')),
 ]
 
 # Serve media files during development

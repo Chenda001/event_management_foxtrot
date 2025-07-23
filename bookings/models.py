@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User 
+from django.contrib.auth.models import User
 # Make sure Space model exists in venue app
 from venue.models import Space  
 
