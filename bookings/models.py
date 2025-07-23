@@ -1,6 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
-from venue.models import Venue  
+from django.contrib.auth.models import User 
 # Make sure Space model exists in venue app
 from venue.models import Space  
 
@@ -18,7 +17,7 @@ class Booking(models.Model):
     poster = models.ImageField(upload_to='posters/')
     description = models.TextField()
     event_date = models.DateField()
-    venue = models.ForeignKey(Venue, on_delete=models.CASCADE)
+    venue = models.ForeignKey(Space, on_delete=models.CASCADE)
     approved = models.BooleanField(default=False)
 
     def __str__(self):
