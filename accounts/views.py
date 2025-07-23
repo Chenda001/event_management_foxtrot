@@ -47,17 +47,9 @@ def profile_view(request):
     return render(request, 'accounts/profile.html')
 # Logout View
 def home_view(request):
-    return render(request, 'home.html')
+    return render(request, 'accounts/home.html')
 
 def logout_view(request):
     logout(request)
     messages.info(request, "You have successfully logged out.") 
     return redirect('login')  # update to your desired page
-def bookings_view(request):
-    return render(request, 'bookings.html')
-
-def events_view(request):
-    return render(request, 'events.html')
-
-def venues_view(request):
-    return render(request, 'venues.html')
