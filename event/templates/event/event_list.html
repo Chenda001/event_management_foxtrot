@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="max-width: 800px; margin: auto; padding: 1rem;">
+  <h1 style="text-align: center;">Events</h1>
+
+  <!-- Filter Form -->
+  <form method="get" style="margin-bottom: 2rem; display: flex; flex-wrap: wrap; gap: 1rem;">
+    <div>
+      <label for="space">Venue:</label>
+      <select name="space" id="space">
+        <option value="">All Venues</option>
+        {% for space in spaces %}
+          <option value="{{ space.id }}" {% if selected_space == space.id|stringformat:"s" %}selected{% endif %}>{{ space.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div>
+      <label for="start_date">From:</label>
+      <input type="date" name="start_date" id="start_date" value="{{ start }}">
+    </div>
+
+    <div>
+      <label for="end_date">To:</label>
+      <input type="date" name="end_date" id="end_date" value="{{ end }}">
+    </div>
+
+    <div>
+      <button type="submit" style="padding: 0.5rem 1rem;">Apply Filters</button>
+    </div>
+  </form>
+
+  <!-- Ongoing Events -->
+  <h2>🟡 Ongoing Events</h2>
+  {% if ongoing_events %}
+    <ul>
+      {% for event in ongoing_events %}
+        <li><strong>{{ event.purpose }}</strong> ({{ event.space.name }})<br>
+        {{ event.start_datetime|date:"D M d, H:i" }} - {{ event.end_datetime|date:"H:i" }}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No ongoing events.</p>
+  {% endif %}
+
+  <!-- Upcoming Events -->
+  <h2>🟢 Upcoming Events</h2>
+  {% if upcoming_events %}
+    <ul>
+      {% for event in upcoming_events %}
+        <li><strong>{{ event.purpose }}</strong> ({{ event.space.name }}) on {{ event.start_datetime|date:"D M d, H:i" }}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No upcoming events.</p>
+  {% endif %}
+
+  <!-- Past Events -->
+  <h2>🔴 Past Events</h2>
+  {% if past_events %}
+    <ul>
+      {% for event in past_events %}
+        <li><strong>{{ event.purpose }}</strong> ({{ event.space.name }}) ended {{ event.end_datetime|date:"D M d, H:i" }}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No past events.</p>
+  {% endif %}
+</div>
+{% endblock %}
