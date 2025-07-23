@@ -3,6 +3,6 @@ from .models import Booking
 
 @admin.register(Booking)
 class BookingAdmin(admin.ModelAdmin):
-    list_display = ('space', 'user', 'start_datetime', 'end_datetime', 'approved')
-    list_filter = ('approved', 'start_datetime')
-    search_fields = ('space__name', 'user__username')
+    list_display = ('name', 'venue', 'event_date', 'approved')
+    list_filter = ('approved', 'event_type', 'event_date')
+    search_fields = ('name', 'venue__name')

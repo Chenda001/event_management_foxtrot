@@ -178,18 +178,7 @@
             <div class="space-grid-container">
                 {% for space in spaces %}
                     <div class="space-card">
-                        <div class="space-images">
-                            <!-- Display images with fallbacks -->
-                            <img src="{{ space.image1.url }}" alt="{{ space.name }} Image 1"
-                                 onerror="this.onerror=null;this.src='https://placehold.co/400x300/e5e7eb/6b7280?text=No+Image';"
-                                 class="space-image">
-                            <img src="{{ space.image2.url }}" alt="{{ space.name }} Image 2"
-                                 onerror="this.onerror=null;this.src='https://placehold.co/400x300/e5e7eb/6b7280?text=No+Image';"
-                                 class="space-image">
-                            <img src="{{ space.image3.url }}" alt="{{ space.name }} Image 3"
-                                 onerror="this.onerror=null;this.src='https://placehold.co/400x300/e5e7eb/6b7280?text=No+Image';"
-                                 class="space-image">
-                        </div>
+                        
                         <div class="space-content">
                             <h2 class="space-title">{{ space.name }}</h2>
                             <p class="space-info-text mb-1"><strong>Capacity:</strong> {{ space.capacity }} people</p>
@@ -201,18 +190,16 @@
                                     {{ space.get_status_display }}
                                 </span>
                             </p>
-
-                            {% comment %} <form action="{% url 'book_space' space.id %}" method="post" class="space-form">
-                                {% csrf_token %}
-                                <button type="submit"
-                                        class="book-button {% if space.is_booked %}book-button-booked{% else %}book-button-free{% endif %}">
-                                    {% if space.is_booked %}
-                                        Unbook Space
-                                    {% else %}
-                                        Book Space
-                                    {% endif %}
+                            {% if not space.is_booked %}
+                                <button class="book-button book-button-free"
+                                        onclick="location.href='{% url 'venue:book_space' space.id %}'">
+                                    Book Space
                                 </button>
-                            </form> {% endcomment %}
+                            {% else %}
+                                <button class="book-button book-button-booked" disabled>
+                                    Booked
+                                </button>
+                            {% endif %}
                         </div>
                     </div>
                 {% endfor %}
