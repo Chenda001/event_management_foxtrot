@@ -14,7 +14,7 @@ class Booking(models.Model):
     name = models.CharField(max_length=100)
     event_type = models.CharField(max_length=20, choices=EVENT_TYPES)
     expected_attendance = models.PositiveIntegerField()
-    poster = models.ImageField(upload_to='posters/')
+    poster = models.ImageField(upload_to='posters/', blank=True, null=True)
     description = models.TextField()
     event_date = models.DateField()
     venue = models.ForeignKey(Space, on_delete=models.CASCADE)
