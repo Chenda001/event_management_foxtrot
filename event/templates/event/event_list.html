@@ -1,14 +1,85 @@
 {% extends 'base.html' %}
+
 {% block content %}
 
-<div class="container mt-5">
+<style>
+  .event-section {
+    margin-bottom: 40px;
+  }
+
+  .event-title {
+    margin-bottom: 20px;
+    border-left: 5px solid #333;
+    padding-left: 10px;
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  .event-card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.05);
+    background-color: #fff;
+  }
+
+  .event-card h5 {
+    margin: 0;
+    font-size: 20px;
+    color: #333;
+  }
+
+  .event-card h6 {
+    font-size: 14px;
+    color: #888;
+  }
+
+  .event-card p {
+    margin: 10px 0;
+    font-size: 14px;
+    color: #444;
+  }
+
+  .filter-form {
+    margin-bottom: 40px;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .filter-form label {
+    font-weight: bold;
+  }
+
+  .filter-form input,
+  .filter-form select,
+  .filter-form button {
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  .filter-form button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+
+  .filter-form button:hover {
+    background-color: #0056b3;
+  }
+
+</style>
+
+<div class="container">
   <h1 class="text-center mb-4">Events</h1>
 
   <!-- Filter Form -->
-  <form method="get" class="row g-3 mb-5">
-    <div class="col-md-3">
-      <label for="space" class="form-label">Venue</label>
-      <select name="space" id="space" class="form-select">
+  <form method="get" class="filter-form">
+    <div>
+      <label for="space">Venue</label><br>
+      <select name="space" id="space">
         <option value="">All Venues</option>
         {% for space in spaces %}
           <option value="{{ space.id }}" {% if selected_space == space.id|stringformat:"s" %}selected{% endif %}>{{ space.name }}</option>
@@ -16,63 +87,71 @@
       </select>
     </div>
 
-    <div class="col-md-3">
-      <label for="start_date" class="form-label">From</label>
-      <input type="date" name="start_date" id="start_date" value="{{ start }}" class="form-control">
+    <div>
+      <label for="start_date">From</label><br>
+      <input type="date" name="start_date" id="start_date" value="{{ start }}">
     </div>
 
-    <div class="col-md-3">
-      <label for="end_date" class="form-label">To</label>
-      <input type="date" name="end_date" id="end_date" value="{{ end }}" class="form-control">
+    <div>
+      <label for="end_date">To</label><br>
+      <input type="date" name="end_date" id="end_date" value="{{ end }}">
     </div>
 
-    <div class="col-md-3 d-flex align-items-end">
-      <button type="submit" class="btn btn-primary w-100">Apply Filters</button>
+    <div style="align-self: end;">
+      <button type="submit">Apply Filters</button>
     </div>
   </form>
 
   <!-- Ongoing Events -->
-  <h4 class="text-warning">🟡 Ongoing Events</h4>
-  {% if ongoing_events %}
-    <ul class="list-group mb-4">
+  <div class="event-section">
+    <div class="event-title" style="color: #ff9900;">🟡 Ongoing Events</div>
+    {% if ongoing_events %}
       {% for event in ongoing_events %}
-        <li class="list-group-item">
-          <strong>{{ event.purpose }}</strong> ({{ event.space.name }})<br>
-          {{ event.start_datetime|date:"D M d, H:i" }} - {{ event.end_datetime|date:"H:i" }}
-        </li>
+        <div class="event-card">
+          <h5>{{ event.name }}</h5>
+          <h6>{{ event.venue.name }}</h6>
+          <p>{{ event.description|truncatewords:20 }}</p>
+          <p><small class="text-muted">📅 {{ event.event_date }}</small></p>
+        </div>
       {% endfor %}
-    </ul>
-  {% else %}
-    <p class="text-muted">No ongoing events.</p>
-  {% endif %}
+    {% else %}
+      <p class="text-muted">No ongoing events.</p>
+    {% endif %}
+  </div>
 
   <!-- Upcoming Events -->
-  <h4 class="text-success">🟢 Upcoming Events</h4>
-  {% if upcoming_events %}
-    <ul class="list-group mb-4">
+  <div class="event-section">
+    <div class="event-title" style="color: #28a745;">🟢 Upcoming Events</div>
+    {% if upcoming_events %}
       {% for event in upcoming_events %}
-        <li class="list-group-item">
-          <strong>{{ event.purpose }}</strong> ({{ event.space.name }}) on {{ event.start_datetime|date:"D M d, H:i" }}
-        </li>
+        <div class="event-card">
+          <h5>{{ event.name }}</h5>
+          <h6>{{ event.venue.name }}</h6>
+          <p>{{ event.description|truncatewords:20 }}</p>
+          <p><small class="text-muted">📅 {{ event.event_date }}</small></p>
+        </div>
       {% endfor %}
-    </ul>
-  {% else %}
-    <p class="text-muted">No upcoming events.</p>
-  {% endif %}
+    {% else %}
+      <p class="text-muted">No upcoming events.</p>
+    {% endif %}
+  </div>
 
   <!-- Past Events -->
-  <h4 class="text-danger">🔴 Past Events</h4>
-  {% if past_events %}
-    <ul class="list-group mb-4">
+  <div class="event-section">
+    <div class="event-title" style="color: #dc3545;">🔴 Past Events</div>
+    {% if past_events %}
       {% for event in past_events %}
-        <li class="list-group-item">
-          <strong>{{ event.purpose }}</strong> ({{ event.space.name }}) ended {{ event.end_datetime|date:"D M d, H:i" }}
-        </li>
+        <div class="event-card">
+          <h5>{{ event.name }}</h5>
+          <h6>{{ event.venue.name }}</h6>
+          <p>{{ event.description|truncatewords:20 }}</p>
+          <p><small class="text-muted">📅 {{ event.event_date }}</small></p>
+        </div>
       {% endfor %}
-    </ul>
-  {% else %}
-    <p class="text-muted">No past events.</p>
-  {% endif %}
+    {% else %}
+      <p class="text-muted">No past events.</p>
+    {% endif %}
+  </div>
 </div>
 
 {% endblock %}
