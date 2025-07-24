@@ -1,62 +1,36 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<style>
-  .home {
-    text-align: center;
-    margin-top: 50px;
-    font-family: Arial, sans-serif;
-  }
-
-  .home h2 {
-    font-size: 2em;
-    color: #007BFF;
-    margin-bottom: 20px;
-  }
-
-  .home p {
-    font-size: 1.2em;
-    color: #555;
-    margin-bottom: 10px;
-  }
-
-  .home a {
-    display: inline-block;
-    margin: 10px;
-    padding: 10px 20px;
-    background-color: #007BFF;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-  }
-
-  .home a:hover {
-    background-color: #0056b3;
-  }
-
-  .logout {
-    margin-top: 20px;
-  }
-
-</style>
-
-<section class="home">
-  <h2>Welcome to the Event Management System</h2>
- 
+<div class="text-center mt-5">
+  <h2 class="text-primary mb-3">Welcome to the Event Management System</h2>
 
   {% if user.is_authenticated %}
-    <p>Hello, {{ user.username }}!</p>
+    <p class="lead">Hello, {{ user.username }}!</p>
 
-    <div class="app-links">
-      <a href="{% url 'venue:space_list' %}">Go to Venues</a>
-      <a href="{% url 'bookings:booking_list' %}">View Bookings</a>
-      <a href="{% url 'event:event_list' %}">View Events</a>
+    <div class="d-flex justify-content-center flex-wrap gap-3 mt-4">
+      <a href="{% url 'venue:space_list' %}" class="btn btn-primary">
+        <i class="fa-solid fa-location-dot me-2"></i> Go to Venues
+      </a>
+      <a href="{% url 'bookings:booking_list' %}" class="btn btn-success">
+        <i class="fa-solid fa-calendar-check me-2"></i> View Bookings
+      </a>
+      <a href="{% url 'event:event_list' %}" class="btn btn-info text-white">
+        <i class="fa-solid fa-list me-2"></i> View Events
+      </a>
     </div>
 
-
   {% else %}
-    <p><a href="{% url 'login' %}">Login</a> or <a href="{% url 'register' %}">Register</a> to get started.</p>
+    <p class="lead mt-4">
+      <a href="{% url 'login' %}" class="btn btn-outline-primary me-2">
+        <i class="fa-solid fa-right-to-bracket me-1"></i> Login
+      </a>
+      or
+      <a href="{% url 'register' %}" class="btn btn-outline-success ms-2">
+        <i class="fa-solid fa-user-plus me-1"></i> Register
+      </a>
+      to get started.
+    </p>
   {% endif %}
-</section>
+</div>
 
 {% endblock %}

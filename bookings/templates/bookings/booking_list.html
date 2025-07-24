@@ -1,6 +1,56 @@
 {% extends 'base.html' %}
 {% block content %}
 
+<div class="container mt-5">
+  <h2 class="text-center text-primary mb-4">All Bookings</h2>
+
+  {% if bookings %}
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover align-middle">
+      <thead class="table-primary">
+        <tr>
+          <th>Venue</th>
+          <th>Event Name</th>
+          <th>Event Type</th>
+          <th>Date</th>
+          <th>Attendance</th>
+          <th>User</th>
+          <th>Approved</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for booking in bookings %}
+        <tr>
+          <td>{{ booking.venue.name }}</td>
+          <td>{{ booking.name }}</td>
+          <td>{{ booking.get_event_type_display }}</td>
+          <td>{{ booking.event_date }}</td>
+          <td>{{ booking.expected_attendance }}</td>
+          <td>{{ booking.user.username }}</td>
+          <td>
+            {% if booking.approved %}
+              <span class="badge bg-success">Yes</span>
+            {% else %}
+              <span class="badge bg-secondary">No</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+    <div class="alert alert-info text-center" role="alert">
+      No bookings found.
+    </div>
+  {% endif %}
+</div>
+
+{% endblock %}
+
+{% extends 'base.html' %}
+{% block content %}
+
 <style>
 body {
     font-family: Arial, sans-serif;
