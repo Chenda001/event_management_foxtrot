@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
-
 {% block content %}
-<div style="max-width: 800px; margin: auto; padding: 1rem;">
-  <h1 style="text-align: center;">Events</h1>
+
+<div class="container mt-5">
+  <h1 class="text-center mb-4">Events</h1>
 
   <!-- Filter Form -->
-  <form method="get" style="margin-bottom: 2rem; display: flex; flex-wrap: wrap; gap: 1rem;">
-    <div>
-      <label for="space">Venue:</label>
-      <select name="space" id="space">
+  <form method="get" class="row g-3 mb-5">
+    <div class="col-md-3">
+      <label for="space" class="form-label">Venue</label>
+      <select name="space" id="space" class="form-select">
         <option value="">All Venues</option>
         {% for space in spaces %}
           <option value="{{ space.id }}" {% if selected_space == space.id|stringformat:"s" %}selected{% endif %}>{{ space.name }}</option>
@@ -16,56 +16,63 @@
       </select>
     </div>
 
-    <div>
-      <label for="start_date">From:</label>
-      <input type="date" name="start_date" id="start_date" value="{{ start }}">
+    <div class="col-md-3">
+      <label for="start_date" class="form-label">From</label>
+      <input type="date" name="start_date" id="start_date" value="{{ start }}" class="form-control">
     </div>
 
-    <div>
-      <label for="end_date">To:</label>
-      <input type="date" name="end_date" id="end_date" value="{{ end }}">
+    <div class="col-md-3">
+      <label for="end_date" class="form-label">To</label>
+      <input type="date" name="end_date" id="end_date" value="{{ end }}" class="form-control">
     </div>
 
-    <div>
-      <button type="submit" style="padding: 0.5rem 1rem;">Apply Filters</button>
+    <div class="col-md-3 d-flex align-items-end">
+      <button type="submit" class="btn btn-primary w-100">Apply Filters</button>
     </div>
   </form>
 
   <!-- Ongoing Events -->
-  <h2>🟡 Ongoing Events</h2>
+  <h4 class="text-warning">🟡 Ongoing Events</h4>
   {% if ongoing_events %}
-    <ul>
+    <ul class="list-group mb-4">
       {% for event in ongoing_events %}
-        <li><strong>{{ event.purpose }}</strong> ({{ event.space.name }})<br>
-        {{ event.start_datetime|date:"D M d, H:i" }} - {{ event.end_datetime|date:"H:i" }}</li>
+        <li class="list-group-item">
+          <strong>{{ event.purpose }}</strong> ({{ event.space.name }})<br>
+          {{ event.start_datetime|date:"D M d, H:i" }} - {{ event.end_datetime|date:"H:i" }}
+        </li>
       {% endfor %}
     </ul>
   {% else %}
-    <p>No ongoing events.</p>
+    <p class="text-muted">No ongoing events.</p>
   {% endif %}
 
   <!-- Upcoming Events -->
-  <h2>🟢 Upcoming Events</h2>
+  <h4 class="text-success">🟢 Upcoming Events</h4>
   {% if upcoming_events %}
-    <ul>
+    <ul class="list-group mb-4">
       {% for event in upcoming_events %}
-        <li><strong>{{ event.purpose }}</strong> ({{ event.space.name }}) on {{ event.start_datetime|date:"D M d, H:i" }}</li>
+        <li class="list-group-item">
+          <strong>{{ event.purpose }}</strong> ({{ event.space.name }}) on {{ event.start_datetime|date:"D M d, H:i" }}
+        </li>
       {% endfor %}
     </ul>
   {% else %}
-    <p>No upcoming events.</p>
+    <p class="text-muted">No upcoming events.</p>
   {% endif %}
 
   <!-- Past Events -->
-  <h2>🔴 Past Events</h2>
+  <h4 class="text-danger">🔴 Past Events</h4>
   {% if past_events %}
-    <ul>
+    <ul class="list-group mb-4">
       {% for event in past_events %}
-        <li><strong>{{ event.purpose }}</strong> ({{ event.space.name }}) ended {{ event.end_datetime|date:"D M d, H:i" }}</li>
+        <li class="list-group-item">
+          <strong>{{ event.purpose }}</strong> ({{ event.space.name }}) ended {{ event.end_datetime|date:"D M d, H:i" }}
+        </li>
       {% endfor %}
     </ul>
   {% else %}
-    <p>No past events.</p>
+    <p class="text-muted">No past events.</p>
   {% endif %}
 </div>
+
 {% endblock %}

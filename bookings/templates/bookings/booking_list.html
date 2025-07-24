@@ -1,86 +1,49 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<style>
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f6f8;
-    margin: 0;
-    padding: 0;
-}
-.container {
-    max-width: 1000px;
-    margin: 30px auto;
-    background: #fff;
-    padding: 20px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    border-radius: 8px;
-}
-h2 {
-    text-align: center;
-    color: #333;
-}
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-}
-th {
-    background-color: #007BFF;
-    color: white;
-}
-tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
-tr:hover {
-    background-color: #e9ecef;
-}
-.no-bookings {
-    text-align: center;
-    font-size: 1.2em;
-    color: #777;
-    margin-top: 30px;
-}
-</style>
+<div class="container mt-5">
+  <h2 class="text-center text-primary mb-4">All Bookings</h2>
 
-<div class="container">
-    <h2>All Bookings</h2>
-
-    {% if bookings %}
-    <table>
-        <thead>
-            <tr>
-                <th>Venue</th>
-                <th>Event Name</th>
-                <th>Event Type</th>
-                <th>Date</th>
-                <th>Attendance</th>
-                <th>User</th>
-                <th>Approved</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for booking in bookings %}
-            <tr>
-                <td>{{ booking.venue.name }}</td>
-                <td>{{ booking.name }}</td>
-                <td>{{ booking.get_event_type_display }}</td>
-                <td>{{ booking.event_date }}</td>
-                <td>{{ booking.expected_attendance }}</td>
-                <td>{{ booking.user.username }}</td>
-                <td>{{ booking.approved|yesno:"Yes,No" }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
+  {% if bookings %}
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover align-middle">
+      <thead class="table-primary">
+        <tr>
+          <th>Venue</th>
+          <th>Event Name</th>
+          <th>Event Type</th>
+          <th>Date</th>
+          <th>Attendance</th>
+          <th>User</th>
+          <th>Approved</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for booking in bookings %}
+        <tr>
+          <td>{{ booking.venue.name }}</td>
+          <td>{{ booking.name }}</td>
+          <td>{{ booking.get_event_type_display }}</td>
+          <td>{{ booking.event_date }}</td>
+          <td>{{ booking.expected_attendance }}</td>
+          <td>{{ booking.user.username }}</td>
+          <td>
+            {% if booking.approved %}
+              <span class="badge bg-success">Yes</span>
+            {% else %}
+              <span class="badge bg-secondary">No</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
     </table>
-    {% else %}
-        <p class="no-bookings">No bookings found.</p>
-    {% endif %}
+  </div>
+  {% else %}
+    <div class="alert alert-info text-center" role="alert">
+      No bookings found.
+    </div>
+  {% endif %}
 </div>
 
 {% endblock %}
