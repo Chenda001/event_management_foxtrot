@@ -1,91 +1,110 @@
 {% extends 'base.html' %}
 
+{% block title %}All Bookings{% endblock %}
+
 {% block content %}
-  <div class="form-wrapper">
-    <div class="booking-card">
-      <h2>📅 Book Space: {{ space.name }}</h2>
-      <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">✅ Submit Booking</button>
-      </form>
-    </div>
-  </div>
+<div class="feedback-container">
+  <h2>All Bookings</h2>
 
-  <style>
-    .form-wrapper {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 90vh;
-      background-color: #f4f6f8;
-      padding: 2rem;
-    }
+  {% if bookings %}
+    <table class="feedback-table">
+      <thead>
+        <tr>
+          <th>Venue</th>
+          <th>Event Name</th>
+          <th>Event Type</th>
+          <th>Date</th>
+          <th>Attendance</th>
+          <th>User</th>
+          <th>Approved</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for booking in bookings %}
+        <tr>
+          <td>{{ booking.venue.name }}</td>
+          <td>{{ booking.name }}</td>
+          <td>{{ booking.get_event_type_display }}</td>
+          <td>{{ booking.event_date }}</td>
+          <td>{{ booking.expected_attendance }}</td>
+          <td>{{ booking.user.username }}</td>
+          <td>
+            {% if booking.approved %}
+              <span class="badge bg-success">Yes</span>
+            {% else %}
+              <span class="badge bg-secondary">No</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p class="no-bookings">No bookings found.</p>
+  {% endif %}
+</div>
 
-    .booking-card {
-      width: 100%;
-      max-width: 600px;
-      background: #ffffff;
-      padding: 2rem 2.5rem;
-      border-radius: 15px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-    }
+<style>
+.feedback-container {
+  max-width: 1000px;
+  margin: 100px auto;
+  padding: 30px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.1);
+  font-family: 'Segoe UI', sans-serif;
+}
 
-    .booking-card h2 {
-      text-align: center;
-      margin-bottom: 2rem;
-      font-size: 1.8rem;
-      color: #333;
-    }
+.feedback-container h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #2c3e50;
+}
 
-    form p {
-      margin-bottom: 1.2rem;
-    }
+.feedback-table {
+  width: 100%;
+  border-collapse: collapse;
+}
 
-    label {
-      display: block;
-      margin-bottom: 0.4rem;
-      font-weight: 600;
-      color: #333;
-    }
+.feedback-table th,
+.feedback-table td {
+  padding: 12px 10px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+  font-size: 14px;
+}
 
-    input[type="text"],
-    input[type="number"],
-    input[type="date"],
-    input[type="file"],
-    select,
-    textarea {
-      width: 100%;
-      padding: 10px 12px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 1rem;
-      transition: border-color 0.3s ease;
-    }
+.feedback-table th {
+  background-color: #f5f5f5;
+  font-weight: 600;
+  color: #333;
+}
 
-    input:focus,
-    select:focus,
-    textarea:focus {
-      border-color: #007bff;
-      outline: none;
-    }
+.feedback-table tr:hover {
+  background-color: #f9f9f9;
+}
 
-    button {
-      display: block;
-      width: 100%;
-      background-color: #007bff;
-      color: white;
-      padding: 12px 0;
-      border: none;
-      border-radius: 6px;
-      font-size: 1rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
+.badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+}
 
-    button:hover {
-      background-color: #0056b3;
-    }
-  </style>
+.bg-success {
+  background-color: #28a745;
+  color: white;
+}
+
+.bg-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.no-bookings {
+  text-align: center;
+  font-size: 16px;
+  color: #777;
+  margin-top: 20px;
+}
+</style>
 {% endblock %}
